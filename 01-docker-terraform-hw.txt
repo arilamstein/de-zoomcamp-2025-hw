@@ -1,0 +1,90 @@
+1.
+
+(venv) ➜  01-docker-terraform docker run -it python:3.12.8
+Python 3.12.8 (main, Jan 14 2025, 23:45:43) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pip
+>>> pip.__version__
+'24.3.1'
+>>>
+
+---------------------------------------------------------------------------------------------------------
+2.
+
+db:5432
+
+---------------------------------------------------------------------------------------------------------
+3.
+
+104,802; 198,924; 109,603; 27,678; 35,189
+
+Here's the SQL:
+
+SELECT
+	SUM(CASE WHEN trip_distance <= 1 THEN 1 ELSE 0 END) AS "Distance <= 1",
+	SUM(CASE WHEN trip_distance > 1 AND trip_distance <= 3 THEN 1 ELSE 0 END) AS "Distance between 1 and 3",
+	SUM(CASE WHEN trip_distance > 3 AND trip_distance <= 7 THEN 1 ELSE 0 END) AS "Distance between 3 and 7",
+	SUM(CASE WHEN trip_distance > 10 THEN 1 ELSE 0 END) AS "Distance over 0 miles"
+FROM
+	green_taxi_trips
+WHERE
+	lpep_pickup_datetime >= '2019-10-01' AND
+	lpep_dropoff_datetime < '2019-11-01'
+
+---------------------------------------------------------------------------------------------------------
+4.
+
+2019-10-31
+
+SQL:
+
+SELECT
+	*
+FROM
+	green_taxi_trips
+ORDER BY
+    trip_distance DESC;
+
+---------------------------------------------------------------------------------------------------------
+5.
+
+East Harlem North, East Harlem South, Morningside Heights
+
+SELECT 
+	CONCAT(zones."Borough", ' / ', zones."Zone") AS neighborhood,
+	sum(total_amount)
+FROM
+	green_taxi_trips JOIN zones ON "PULocationID" = zones."LocationID"
+WHERE
+	DATE(lpep_pickup_datetime) = '2019-10-18'
+GROUP BY
+	neighborhood
+ORDER BY
+	SUM(total_amount) DESC
+
+6.
+
+JFK Airport
+
+-- LocationID of East Harlem North is 74
+SELECT
+	*
+FROM
+	zones
+WHERE 
+	zones."Zone" = 'East Harlem North'
+
+SELECT 
+	"Zone",
+	MAX("tip_amount")
+FROM
+	green_taxi_trips JOIN zones ON zones."LocationID"=green_taxi_trips."DOLocationID" 
+WHERE
+	lpep_pickup_datetime < '2019-11-01' AND
+	"PULocationID" = 74
+GROUP BY
+	"Zone"
+ORDER BY
+	MAX("tip_amount") DESC
+
+7. terraform init, terraform apply -auto-approve, terraform destroy
