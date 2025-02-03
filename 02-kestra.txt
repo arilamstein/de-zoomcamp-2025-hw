@@ -1,0 +1,14 @@
+This homework is hard to "show work" for because it is all basically done via
+a UI. So I'm including screenshots
+
+1. 128.3. See "hw2-1.png" for a screenshot
+
+2. green_tripdata_2020-04.csv. See the previous screenshot. It's always the same format.
+
+3. 24,648,499. See screeshot "hw2-3.png".
+
+4. 1,734,051. See screenshot "hw2-4.png"
+
+5. 1,925,152. See screenshot "hw2-5.png"
+
+6 America/New_York. It's from the documentation on this page: https://kestra.io/docs/workflow-components/triggers/schedule-trigger
