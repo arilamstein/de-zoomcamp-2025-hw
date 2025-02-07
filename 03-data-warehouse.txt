@@ -1,0 +1,48 @@
+Question 1. 
+20,332,093. See hw3-1.png
+
+Question 2. 
+0 MB for the External Table and 155.12 MB for the Materialized Table
+See hw3-2-external.png and hw3-2-table.png
+
+Question 3.
+I'm guessing that it's this answer, because adding the second column (which 
+is of the same type) exactly doubled the amount read. This answer seems most
+consistent with that, which is I guess what you wanted us to realize:
+
+"BigQuery is a columnar database, and it only scans the specific columns requested 
+in the query. Querying two columns (PULocationID, DOLocationID) requires reading 
+more data than querying one column (PULocationID), leading to a higher estimated 
+number of bytes processed."
+
+Question 4.
+8,333. My query is:
+
+SELECT 
+  count(*)
+FROM  
+  `dtc-de-448517.hw3.all` 
+WHERE
+  fare_amount=0
+
+Question 5.
+Partition by tpep_dropoff_datetime and Cluster on VendorID. Same as
+the video. The query is:
+
+CREATE OR REPLACE TABLE dtc-de-448517.hw3.all_partitoned_clustered
+PARTITION BY DATE(tpep_pickup_datetime)
+CLUSTER BY VendorID AS
+SELECT * FROM dtc-de-448517.hw3.all;
+
+Question 6.
+310.24 MB for non-partitioned table and 26.84 MB for the partitioned table
+See hw3-6.png for a screenshot of the estimate of the partitioned table.
+
+Question 7.
+GCP Bucket. That's what it means for the table to be external.
+
+Question 8.
+False. Why would it be? It seems only useful if you are frequently 
+ordering it (essentially what the cluster does) and there's a lot of it
+(so the cost of the the cluster in space and time is worth it)
+
